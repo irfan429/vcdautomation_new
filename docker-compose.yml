@@ -1,0 +1,41 @@
+version: "3"
+services:
+  selenium-hub:
+    restart: always
+    image: selenium/hub
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+    environment:
+      GRID_MAX_SESSION: 8
+    networks:
+      grid:
+  chrome:
+    restart: always
+    image: selenium/node-chrome-debug
+    stdin_open: true
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    networks:
+      grid:
+#  firefox:
+#    restart: always
+#    image: selenium/node-firefox-debug
+#    stdin_open: true
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - HUB_HOST=selenium-hub
+#      - HUB_PORT=4444
+#    networks:
+#      grid:
+
+networks:
+  grid:
